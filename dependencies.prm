@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GraphParameters>
+<GraphParameter name="SYNTHETIC_DATA_GENERATOR_LIB" value="sandbox://SyntheticDataGeneratorLib_2.0"/>
+</GraphParameters>

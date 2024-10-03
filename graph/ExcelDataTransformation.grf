@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Graph author="JanSlechta" created="Wed Oct 02 14:14:10 CEST 2024" guiVersion="6.6.0.8" id="1727963405670" licenseCode="Unlicensed" name="ExcelDataTransformation" showComponentDetails="true">
+<Global>
+<Metadata id="Metadata0">
+<Record fieldDelimiter="|" name="GeneratedCustomers" previewAttachmentCharset="UTF-8" recordDelimiter="\r\n" type="delimited">
+<Field format="" label="Person id" name="personId" type="long"/>
+<Field format="" label="First name" name="firstName" type="string"/>
+<Field label="Middle name/initial" name="middleNameInitial" type="string"/>
+<Field format="" label="Last name" name="lastName" type="string"/>
+<Field format="excel:YYYY-MM-DD" label="Date of birth" name="dob" type="date"/>
+<Field name="dobYear" type="integer"/>
+<Field format="" label="Gender" name="gender" type="string"/>
+<Field format="" label="Email" name="email" type="string"/>
+</Record>
+</Metadata>
+<Metadata id="Metadata1">
+<Record fieldDelimiter="|" name="Statistics" previewAttachmentCharset="UTF-8" recordDelimiter="\r\n" type="delimited">
+<Field name="year" type="integer"/>
+<Field name="count" type="integer"/>
+</Record>
+</Metadata>
+<GraphParameters>
+<GraphParameterFile fileURL="workspace.prm"/>
+</GraphParameters>
+<Dictionary/>
+</Global>
+<Phase number="0">
+<Node aggregateKey="dobYear" guiName="Get Count per Year" guiX="1171" guiY="391" id="GET_COUNT_PER_YEAR" mapping="$year:=$dobYear;$count:=count();" type="AGGREGATE"/>
+<Node guiName="Get Year" guiX="704" guiY="391" id="GET_YEAR" type="REFORMAT">
+<attr name="transform"><![CDATA[//#CTL2
+
+// Transforms input record into output record.
+function integer transform() {
+	$out.0.personId = $in.0.personId;
+	$out.0.firstName = $in.0.firstName;
+	$out.0.middleNameInitial = $in.0.middleNameInitial;
+	$out.0.lastName = $in.0.lastName;
+	$out.0.dob = $in.0.dob;
+	$out.0.dobYear = getYear($in.0.dob);
+	$out.0.gender = $in.0.gender;
+	$out.0.email = $in.0.email;
+
+	return ALL;
+}
+
+// Called during component initialization.
+// function boolean init() {}
+
+// Called during each graph run before the transform is executed. May be used to allocate and initialize resources
+// required by the transform. All resources allocated within this method should be released
+// by the postExecute() method.
+// function void preExecute() {}
+
+// Called only if transform() throws an exception.
+// function integer transformOnError(string errorMessage, string stackTrace) {}
+
+// Called during each graph run after the entire transform was executed. Should be used to free any resources
+// allocated within the preExecute() method.
+// function void postExecute() {}
+
+// Called to return a user-defined error message when an error occurs.
+// function string getMessage() {}
+]]></attr>
+</Node>
+<Node guiName="Sort by Year" guiX="920" guiY="391" id="SORT_BY_YEAR" sortKey="dobYear(a)" type="EXT_SORT"/>
+<Node fileURL="${DATAIN_DIR}/generated/*.xlsx" guiName="SpreadsheetDataReader" guiX="390" guiY="391" id="SPREADSHEET_DATA_READER" sheet="Customers" type="SPREADSHEET_READER">
+<attr name="mapping"><![CDATA[<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<mapping>
+    <globalAttributes>
+        <step>1</step>
+        <orientation>VERTICAL</orientation>
+        <writeHeader>true</writeHeader>
+    </globalAttributes>
+    <defaultSkip>1</defaultSkip>
+    <headerGroups>
+        <headerGroup skip="1">
+            <cloverField>personId</cloverField>
+            <headerRanges>
+                <headerRange begin="A1"/>
+            </headerRanges>
+        </headerGroup>
+        <headerGroup skip="1">
+            <cloverField>firstName</cloverField>
+            <headerRanges>
+                <headerRange begin="B1"/>
+            </headerRanges>
+        </headerGroup>
+        <headerGroup skip="1">
+            <cloverField>middleNameInitial</cloverField>
+            <headerRanges>
+                <headerRange begin="C1"/>
+            </headerRanges>
+        </headerGroup>
+        <headerGroup skip="1">
+            <cloverField>lastName</cloverField>
+            <headerRanges>
+                <headerRange begin="D1"/>
+            </headerRanges>
+        </headerGroup>
+        <headerGroup skip="1">
+            <cloverField>dob</cloverField>
+            <headerRanges>
+                <headerRange begin="E1"/>
+            </headerRanges>
+        </headerGroup>
+        <headerGroup skip="1">
+            <cloverField>gender</cloverField>
+            <headerRanges>
+                <headerRange begin="F1"/>
+            </headerRanges>
+        </headerGroup>
+        <headerGroup skip="1">
+            <cloverField>email</cloverField>
+            <headerRanges>
+                <headerRange begin="G1"/>
+            </headerRanges>
+        </headerGroup>
+    </headerGroups>
+</mapping>
+]]></attr>
+</Node>
+<Node guiName="Trash" guiX="1465" guiY="391" id="TRASH" type="TRASH"/>
+<Edge fromNode="GET_COUNT_PER_YEAR:0" guiBendpoints="" guiRouter="Manhattan" id="Edge1" inPort="Port 0 (in)" metadata="Metadata1" outPort="Port 0 (out)" toNode="TRASH:0"/>
+<Edge fromNode="GET_YEAR:0" guiBendpoints="" guiRouter="Manhattan" id="Edge2" inPort="Port 0 (in)" metadata="Metadata0" outPort="Port 0 (out)" toNode="SORT_BY_YEAR:0"/>
+<Edge fromNode="SORT_BY_YEAR:0" guiBendpoints="" guiRouter="Manhattan" id="Edge3" inPort="Port 0 (in)" outPort="Port 0 (out)" toNode="GET_COUNT_PER_YEAR:0"/>
+<Edge fromNode="SPREADSHEET_DATA_READER:0" guiBendpoints="" guiRouter="Manhattan" id="Edge0" inPort="Port 0 (in)" metadata="Metadata0" outPort="Port 0 (output)" toNode="GET_YEAR:0"/>
+</Phase>
+</Graph>

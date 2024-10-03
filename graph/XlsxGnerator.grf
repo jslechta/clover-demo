@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Graph author="JanSlechta" created="Wed Oct 02 14:14:10 CEST 2024" guiVersion="6.6.0.8" id="1727963473079" licenseCode="Unlicensed" name="XlsxGnerator" showComponentDetails="true">
+<Global>
+<GraphParameters>
+<GraphParameter name="GENERATED_FILENAME">
+<attr name="dynamicValue"><![CDATA[//#CTL2
+
+function string getValue() {
+	return "GeneratedCustomers-" + date2str(today(), "yyyyMMdd-HHmmss");
+}
+]]></attr>
+</GraphParameter>
+<GraphParameterFile fileURL="workspace.prm"/>
+<GraphParameterFile fileURL="dependencies.prm"/>
+</GraphParameters>
+<Dictionary/>
+</Global>
+<Phase number="0">
+<Node __RECORD_COUNT="500" guiName="GeneratePerson" guiX="499" guiY="232" id="GENERATE_PERSON" jobURL="${SYNTHETIC_DATA_GENERATOR_LIB}/graph/subgraph/GeneratePerson.sgrf" type="SUBGRAPH">
+<attr name="guiDescription"><![CDATA[Generate random person with full names and basic contact details.]]></attr>
+</Node>
+<Node existingSheetsActions="REMOVE_SHEETS" fileURL="${DATAIN_DIR}/generated/${GENERATED_FILENAME}.xlsx" guiName="SpreadsheetDataWriter" guiX="877" guiY="232" id="SPREADSHEET_DATA_WRITER" makeDirs="true" sheet="Customers" type="SPREADSHEET_WRITER" writeMode="OVERWRITE_SHEET_IN_STREAM">
+<attr name="mapping"><![CDATA[<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<mapping>
+    <globalAttributes>
+        <step>1</step>
+        <orientation>VERTICAL</orientation>
+        <writeHeader>true</writeHeader>
+    </globalAttributes>
+    <defaultSkip>1</defaultSkip>
+    <headerGroups>
+        <headerGroup skip="1">
+            <cloverField>id</cloverField>
+            <headerRanges>
+                <headerRange begin="A1"/>
+            </headerRanges>
+        </headerGroup>
+        <headerGroup skip="1">
+            <cloverField>firstName</cloverField>
+            <headerRanges>
+                <headerRange begin="B1"/>
+            </headerRanges>
+        </headerGroup>
+        <headerGroup skip="1">
+            <cloverField>middleName</cloverField>
+            <headerRanges>
+                <headerRange begin="C1"/>
+            </headerRanges>
+        </headerGroup>
+        <headerGroup skip="1">
+            <cloverField>lastName</cloverField>
+            <headerRanges>
+                <headerRange begin="D1"/>
+            </headerRanges>
+        </headerGroup>
+        <headerGroup skip="1">
+            <cloverField>dateOfBirth</cloverField>
+            <headerRanges>
+                <headerRange begin="E1"/>
+            </headerRanges>
+        </headerGroup>
+        <headerGroup skip="1">
+            <cloverField>gender</cloverField>
+            <headerRanges>
+                <headerRange begin="F1"/>
+            </headerRanges>
+        </headerGroup>
+        <headerGroup skip="1">
+            <cloverField>email</cloverField>
+            <headerRanges>
+                <headerRange begin="G1"/>
+            </headerRanges>
+        </headerGroup>
+    </headerGroups>
+</mapping>
+]]></attr>
+</Node>
+<Edge fromNode="GENERATE_PERSON:0" guiBendpoints="" guiRouter="Manhattan" id="Edge0" inPort="Port 0 (input)" outPort="Port 0 (out)" toNode="SPREADSHEET_DATA_WRITER:0"/>
+</Phase>
+</Graph>
